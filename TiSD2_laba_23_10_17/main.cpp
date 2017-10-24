@@ -194,12 +194,12 @@ void Sort_to_time(book_t *arr, int n, Table_key *keys)
     sum_not_key = 0;
     for (int i = 0; i < 5; ++i)
     {
-    //Сортировка таблицы
-    t3 = tick();
-    mySort(arr3, 0, n, isLess);
-    //quick_sort(arr,arr+n-1);
-    t4 = tick();
-    sum_not_key += t3 - t4;
+		//Сортировка таблицы
+		t3 = tick();
+		mySort(arr3, 0, n, isLess);
+		//quick_sort(arr,arr+n-1);
+		t4 = tick();
+		sum_not_key += t4 - t3;
 	}
 
     cout << "Время работы сортировки по ключам (Пузырек): " << sum_key/5 << " тик" << endl;
@@ -218,23 +218,31 @@ void DifSort(book_t *arr, int n, Table_key *keys)
         cout << keys[i].id << " ";
     }
     cout << endl;
-
+	unsigned long long sum_key_qsort = 0;
     for(int i = 0; i < 5; ++i)
-    t1 = clock();
-    quick_sort(keys, keys + n - 1);
-    t2 = clock();
+	{
+		t1 = tick();
+		quick_sort(keys, keys + n - 1);
+		t2 = tick();
+		sum_key_qsort += t2 - t1;
+	}
 
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < 5; ++i)
     {
         cout << keys[i].id << " ";
         keys[i] = Table_key(i, arr[i]);
     }
     cout << endl;
-
-    t3 = clock();
-    mySort(keys, 0, n, isLess);
-    t4 = clock();
+	
+	unsigned long long sum_key_bsort = 0;
+	for (int i = 0; i < 5; ++i)
+	{
+		t3 = tick();
+		mySort(keys, 0, n, isLess);
+		t4 = tick();
+		sum_key_bsort += t4 - t3;
+	}
 
     for (int i = 0; i < n; i++)
     {
@@ -244,8 +252,8 @@ void DifSort(book_t *arr, int n, Table_key *keys)
     }
     cout << endl;
 
-    cout << "Время работы быстрой сортировки: " << t2 - t1 << " мс" << endl;
-    cout << "Время работы сортировки пузырьком: " << t4 - t3 << " мс" << endl;
+    cout << "Время работы быстрой сортировки: " << sum_key_qsort/5 << " тик" << endl;
+    cout << "Время работы сортировки пузырьком: " << sum_key_bsort/5 << " тик" << endl;
 
 }
 
@@ -275,12 +283,12 @@ void Key_sort(book_t *arr, int n, Table_key *keys)
 
 int main(void)
 {
+
     book_t *arr2 = new book_t[MAX_RECORD];
     int count;
 
-    time_t t1, t2, t3, t4;
-
-    //int z;
+    //time_t t1, t2, t3, t4;
+	
     ifstream fin;
     fin.open("database.txt");
 
@@ -295,7 +303,6 @@ int main(void)
 		fin >> tmp;
 		count = atoi(tmp);
 		readFromFile(fin, arr2, count);
-		//read_dB()//arr2, &n2, fin);
     }
 
     book_t *arr = new book_t[MAX_RECORD];
@@ -315,7 +322,6 @@ int main(void)
         cout << "1: Отсортировать по ключам (не меняя исходную)" << endl;
         cout << "2: Отсортировать таблицу" << endl;
         cout << "3: Добавить запись" << endl;
-        //cout << "4: Удалить запись" << endl;
         cout << "4: Сравние времени сортировки таблицы и ключей" << endl;
         cout << "5: Сравнить эффективность сортировок (по ключам)" << endl;
         cout << "6: Поиск по году и отрасли" << endl;
@@ -344,6 +350,7 @@ int main(void)
             a = x;
         }
 */
+//cout << "4: Удалить запись" << endl;
         int a;
         cin >> a;
         int n = count;
