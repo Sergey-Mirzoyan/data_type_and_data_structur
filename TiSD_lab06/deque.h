@@ -1,7 +1,3 @@
-//
-// Created by serych on 05.12.16.
-//
-
 #ifndef LABA6_TISD_DEQUE_H
 #define LABA6_TISD_DEQUE_H
 
@@ -11,7 +7,8 @@
 using namespace std;
 
 template <class T>
-class Deque {
+class Deque
+{
 public:
     Deque(int size);
     Deque();
@@ -59,15 +56,15 @@ Deque<T>::~Deque()
 }
 
 template <typename T>
-void Deque<T>::IncreaseBuffer() {
+void Deque<T>::IncreaseBuffer()
+{
     T* tmpBuffer = new T[(bufferSize * 2)];
     assert(tmpBuffer);
 
     tmpBuffer[0] = buffer[head];
     for (int i = bufferSize + 1; i < bufferSize * 2; i++)
-    {
         tmpBuffer[i] = buffer[(tail + i - 1 - bufferSize) % bufferSize];
-    }
+
     head = 0;
     tail = bufferSize + 1;
     bufferSize *= 2;
@@ -77,16 +74,15 @@ void Deque<T>::IncreaseBuffer() {
 }
 
 template <typename T>
-void Deque<T>::DecreaseBuffer() {
+void Deque<T>::DecreaseBuffer()
+{
     T* tmpBuffer = new T[(bufferSize / 2)];
     assert(tmpBuffer);
     assert(bufferSize >= minBufferSize);
 
     tmpBuffer[0] = buffer[head];
     for (int i = 1; i < bufferSize / 2; i++)
-    {
         tmpBuffer[i] = buffer[(tail + i - 1) % bufferSize];
-    }
 
     head = 0;
     tail = 1;
@@ -99,7 +95,8 @@ void Deque<T>::DecreaseBuffer() {
 template <typename T>
 void Deque<T>::PushFront(T data)
 {
-    if (IsEmpty()) {
+    if (IsEmpty())
+    {
         buffer[0] = data;
         head = 0;
         tail = 0;
@@ -108,7 +105,8 @@ void Deque<T>::PushFront(T data)
     else
     {
         head = (head + 1) % bufferSize;
-        if (head == tail) {
+        if (head == tail)
+        {
             head--;
             if (head < 0)
                 head = bufferSize - 1;
@@ -121,8 +119,10 @@ void Deque<T>::PushFront(T data)
 
 
 template <typename T>
-void Deque<T>::PushBack(T data) {
-    if (IsEmpty()) {
+void Deque<T>::PushBack(T data)
+{
+    if (IsEmpty())
+    {
         buffer[bufferSize - 1] = data;
         tail = bufferSize - 1;
         head = bufferSize - 1;
@@ -133,7 +133,8 @@ void Deque<T>::PushBack(T data) {
         tail = (tail - 1);
         if (tail < 0)
             tail = bufferSize - 1;
-        if (head == tail) {
+        if (head == tail)
+        {
             tail = (tail + 1) % bufferSize;
             IncreaseBuffer();
             tail--;
@@ -145,7 +146,8 @@ void Deque<T>::PushBack(T data) {
 
 
 template <typename T>
-T Deque<T>::PopBack() {
+T Deque<T>::PopBack()
+{
     if (IsEmpty())
         throw "Cannot pop from empty Deque";
     if (tail == head)
@@ -154,15 +156,13 @@ T Deque<T>::PopBack() {
     tail = (tail + 1) % bufferSize;
     int rasst = (tail > head) ? head + bufferSize - tail : head - tail;
     if (rasst < bufferSize / 2  && bufferSize > minBufferSize)
-    {
         DecreaseBuffer();
-    }
     return data;
 }
 
-
 template <typename T>
-T Deque<T>::PopFront() {
+T Deque<T>::PopFront()
+{
     if (IsEmpty())
         throw "Cannot pop from empty Deque";
     if (tail == head)
@@ -174,9 +174,7 @@ T Deque<T>::PopFront() {
 
     int rasst = (tail > head) ? head + bufferSize - tail : head - tail;
     if (rasst < bufferSize / 2  && bufferSize > minBufferSize)
-    {
         DecreaseBuffer();
-    }
     return data;
 }
 
@@ -188,24 +186,26 @@ bool Deque<T>::IsEmpty() const
 }
 
 template <typename T>
-void Deque<T>::print(bool debug) const {
+void Deque<T>::print(bool debug) const
+{
     if (debug)
         std::cout << "Head: " << head << "; Tail: " << tail << std::endl;
     std::cout << "|";
     for (int i = 0; i < bufferSize; i++)
-    {
         std::cout << " " << buffer[i] << " |";
-    }
 }
 
 template <typename T>
-T Deque<T>::GetFront() {
+T Deque<T>::GetFront()
+{
     if (IsEmpty())
         throw "Cannot get from empty Deque";
     return buffer[head];
 }
+
 template <typename T>
-T Deque<T>::GetBack() {
+T Deque<T>::GetBack()
+{
     if (IsEmpty())
         throw "Cannot get from empty Deque";
     return buffer[tail];
